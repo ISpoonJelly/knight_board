@@ -9,53 +9,85 @@ let possible_knight_moves = [
   { row: -2, column: -1 }
 ];
 
-function find_shortest_path(start, finish) {
-  var queue = [];
+function findShortestPath(start, finish) {
+  var solutions = [];
   var visited = [];
 
   var start_solution = [];
   start_solution.push(start);
 
-  queue.push(start_solution);
+  solutions.push(start_solution);
   visited.push(start);
 
-  while (queue.length != 0) {
-    var current_solution = queue.shift();
-    var current_square = current_solution[current_solution.length - 1];
+  while (solutions.length != 0) {
+    var current_solution = solutions.shift();
+    var current_position = current_solution[current_solution.length - 1];
 
     if (
-      current_square.row == finish.row &&
-      current_square.column == finish.column
+      current_position.row == finish.row &&
+      current_position.column == finish.column
     ) {
       return current_solution;
     }
 
-    for (var adjacent of get_possible_moves(current_square)) {
+    for (var adjacent of getPossibleMoves(current_position)) {
+      if (!isVisited(visited, adjacent)) {
+        branch = [];
+        branch = branch.concat(current_solution);
+        branch.push(adjacent);
 
+        visited.push(adjacent);
+
+        solutions.push(branch);
+      }
     }
   }
+
+  return [];
 }
 
-function get_possible_moves(square) {
+function isVisited(list, position) {
+  for (var current of list) {
+    if (position.row == current.row && position.column == current.column) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getPossibleMoves(position) {
   var adjacent = [];
   for (var move of possible_knight_moves) {
-    if (is_valid_move(square, move.row, move.column)) {
-      adjacent.push({ row: square.row + move.row, column: square.column + move.column });
+    if (isValidMove(position, move.row, move.column)) {
+      adjacent.push({
+        row: position.row + move.row,
+        column: position.column + move.column
+      });
     }
   }
 
   return adjacent;
 }
 
-function is_valid_move(square, row, column) {
-  var row_move = square.row + row >= 1 && square.row + row <= 8;
-  var column_move = square.column + column >= 1 && square.column + column <= 8;
+function isValidMove(position, row, column) {
+  var row_move = position.row + row >= 1 && position.row + row <= 8;
+  var col_move = position.column + column >= 1 && position.column + column <= 8;
 
-  return row_move && column_move;
+  return isValidPosition(position) && row_move && col_move;
+}
+
+function isValidPosition(position) {
+  return (
+    position.row >= 1 &&
+    position.row <= 8 &&
+    position.column >= 1 &&
+    position.column <= 8
+  );
 }
 
 module.exports = {
-  find_shortest_path,
-  get_possible_moves,
-  is_valid_move
+  find_shortest_path: findShortestPath,
+  get_possible_moves: getPossibleMoves,
+  is_valid_move: isValidMove,
+  is_valid_position: isValidPosition
 };

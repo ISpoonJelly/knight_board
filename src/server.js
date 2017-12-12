@@ -14,10 +14,8 @@ var server;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/board", (req, res) => {
-  res.send("hello");
-});
-app.post("/board", board_controller.save_board);
+app.post("/board/set_board", board_controller.save_board);
+app.post("/board/get_shortest_path", board_controller.get_shortest_path);
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.mongodb.uri, config.mongodb.options).then(

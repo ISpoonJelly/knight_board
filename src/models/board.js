@@ -1,45 +1,44 @@
 var mongoose = require("mongoose");
 
-const boardSchema = new mongoose.Schema({
+var utils = require("../utils/board_utils");
+
+var BoardSchema = new mongoose.Schema({
   knight: {
     type: String,
     required: true
   }
 });
 
-boardSchema.methods.findShortestTo = function(finalPos) {
-    if(!validPosition(finalPos)) {
-        return false;
-    }
+BoardSchema.statics.position_to_string = positionToString;
+BoardSchema.statics.position_list_to_string = positionListToString;
+BoardSchema.statics.string_to_position = stringToPosition;
+BoardSchema.methods.find_shortest_to = findShortestTo;
 
-    
+function findShortestTo (finalPos) {
+  var start = stringToPosition(this.knight);
+  var target = stringToPosition(finalPos);
+
+  return utils.find_shortest_path(start, target);
 };
 
-function validPosition(position) {
-  if (!position || position.length != 2) return false;
-
-  var column = position.charCodeAt(0) - 96;
-  if (column < 1 || column > 8) return false;
-
-  var row = position.charAt(1);
-  if (!isInteger(row)) return false;
-
-  row = parseInt(row);
-  if (row < 1 || row > 8) return false;
-
-  return true;
+function stringToPosition(input) {
+  return { row: parseInt(input.charAt(0)), column: parseInt(input.charAt(1)) };
 }
 
-function normalizeInput(position) {
-    return (position.charCodeAt(0) - 96).toString() + position.charAt(1);
+function positionToString(position) {
+  var letter = String.fromCharCode(96 + position.row);
+  return letter + position.column;
 }
 
-function isInteger(string) {
-  return !isNaN(parseInt(string)) && isFinite(string);
+function positionListToString(list) {
+  var result = [];
+  if (!list) return result;
+
+  for (var item of list) {
+    result.push(positionToString(item));
+  }
+  return result;
 }
 
-boardSchema.statics.validPosition = validPosition;
-boardSchema.statics.normalizeInput = normalizeInput;
-
-let Board = mongoose.model("Board", boardSchema);
+let Board = mongoose.model("Board", BoardSchema);
 module.exports = Board;
