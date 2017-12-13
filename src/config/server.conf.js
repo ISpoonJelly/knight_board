@@ -1,5 +1,5 @@
 let PORT = process.env.PORT || 3000;
-let MONGO_URI = process.env.MONGO_URI || "localhost";
+let MONGO_HOST = process.env.MONGO_HOST || "localhost";
 
 module.exports = {
   express: {
@@ -7,7 +7,7 @@ module.exports = {
   },
 
   mongodb: {
-    uri: "mongodb://" + MONGO_URI + "/board",
+    uri: "mongodb://" + MONGO_HOST + "/board",
     options: {
       useMongoClient: true
     }

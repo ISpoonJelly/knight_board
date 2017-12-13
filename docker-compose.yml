@@ -10,9 +10,11 @@ services:
       - "3000:3000"
     command: npm start
     working_dir: /usr/board
+    volumes:
+      - .:/usr/board
     environment:
       - PORT=3000
-      - MONGO_URI=mongo
+      - MONGO_HOST=mongo
     links:
       - mongo
     depends_on:
