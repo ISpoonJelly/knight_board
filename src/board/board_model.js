@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var utils = require("../utils/board_utils");
+var utils = require("./board_utils");
 
 var BoardSchema = new mongoose.Schema({
   knight: {
@@ -10,7 +10,7 @@ var BoardSchema = new mongoose.Schema({
 });
 
 BoardSchema.statics.position_to_string = positionToString;
-BoardSchema.statics.position_list_to_string = positionListToString;
+BoardSchema.statics.position_list_to_string_list = positionListToStringList;
 BoardSchema.statics.string_to_position = stringToPosition;
 BoardSchema.methods.find_shortest_to = findShortestTo;
 
@@ -30,7 +30,7 @@ function positionToString(position) {
   return letter + position.column;
 }
 
-function positionListToString(list) {
+function positionListToStringList(list) {
   var result = [];
   if (!list) return result;
 

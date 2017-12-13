@@ -1,31 +1,27 @@
 var express = require("express"),
   http = require("http"),
+  helmet = require("helmet"),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose");
 
-var config = require("./config");
+var env_config = require("./config/server.conf");
 
-var board_schema = require("./models/board");
-var board_controller = require("./controllers/board_controller");
+var board = require("./board/index");
 
 var app = express();
 var server;
 
+app.use(helmet());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post("/board/set_board", board_controller.save_board);
-app.post("/board/get_shortest_path", board_controller.get_shortest_path);
+app.post("/board/set_board", board.controller.save_board);
+app.post("/board/get_shortest_path", board.controller.get_shortest_path);
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.mongodb.uri, config.mongodb.options).then(
-  () => {
-    console.log(
-      "[MONGO]",
-      "Successfully connected to MongoDB database:",
-      config.mongodb.uri
-    );
-  },
+mongoose.connect(env_config.mongodb.uri, env_config.mongodb.options).then(
+  () => {},
   err => {
     console.log("[MONGO] %s", err);
     process.exit();
@@ -34,7 +30,7 @@ mongoose.connect(config.mongodb.uri, config.mongodb.options).then(
 
 if (!module.parent) {
   server = http.createServer(app);
-  server.listen(config.express.port, config.express.hostname);
+  server.listen(env_config.express.port, env_config.express.hostname);
 
   server.on("listening", () => {
     var addr = server.address();
@@ -50,3 +46,5 @@ if (!module.parent) {
     process.exit();
   });
 }
+
+module.exports = app;

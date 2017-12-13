@@ -1,7 +1,6 @@
-var chai = require("chai");
-var expect = chai.expect;
+var expect = require("chai").expect;
 
-var board_utils = require("../../src/utils/board_utils");
+var board_utils = require("../../src/board/board_utils");
 
 describe("Board Utils", function() {
   describe("Checking Valid Positions", function() {
@@ -184,7 +183,7 @@ describe("Board Utils", function() {
         .and.deep.include(board_position);
     });
 
-    it("should return a list of length 4 for adjacent target positions", function() {
+    it("should return a list of length 5 for adjacent target positions", function() {
       var board_position;
       board_position = { row: 8, column: 1 };
 

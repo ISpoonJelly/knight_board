@@ -2,12 +2,12 @@ var mongoose = require("mongoose"),
   Board = mongoose.model("Board");
 
 function saveBoard(req, res) {
-  var knight = req.body.knight.toLowerCase();
+  var knight = req.body.knight;
   if (!knight) {
     return res.status(400).send({ message: "Missing input parameters" });
   }
 
-  knight = parseInput(knight);
+  knight = parseInput(knight.toLowerCase());
 
   if (!validInput(knight)) {
     return res.status(400).send({ message: "Invalid knight position" });
@@ -29,26 +29,23 @@ function saveBoard(req, res) {
 
 function getShortestPath(req, res) {
   var id = req.body.id;
-  var target = req.body.target.toLowerCase();
+  var target = req.body.target;
 
   if (!id || !target) {
     return res.status(400).send({ message: "Missing input parameters" });
   }
 
-  target = parseInput(target);
+  target = parseInput(target.toLowerCase());
 
   if (!validInput(target)) {
     return res.status(400).send({ message: "Invalid target position" });
   }
 
   Board.findOne({ _id: id }, (err, board) => {
-    var shortest = board.find_shortest_to(target);
-    var path = Board.position_list_to_string(shortest);
+    var path = board.find_shortest_to(target);
+    var pathStr = Board.position_list_to_string_list(path);
 
-    var start = Board.position_to_string(
-      Board.string_to_position(board.knight)
-    );
-    res.status(200).send({ start, target, path });
+    res.status(200).send({ path: pathStr });
   });
 }
 
