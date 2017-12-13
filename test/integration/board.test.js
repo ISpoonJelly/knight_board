@@ -4,7 +4,7 @@ var request = require("supertest"),
   app = require("../../src/server"),
   Board = require("mongoose").model("Board");
 
-describe("Board Configuartion Saving", function() {
+describe("Board Configuartion", function() {
   it("should fail to create a new board configuration with empty parameters", function(done) {
     request(app)
       .post("/board/set_board")
@@ -12,7 +12,7 @@ describe("Board Configuartion Saving", function() {
       .expect(
         400,
         {
-          message: "Missing input parameters"
+          message: "missing input parameters"
         },
         done
       );
@@ -25,7 +25,7 @@ describe("Board Configuartion Saving", function() {
       .expect(
         400,
         {
-          message: "Invalid knight position"
+          message: "invalid knight position"
         },
         done
       );
@@ -65,6 +65,91 @@ describe("Board Configuartion Saving", function() {
   });
 });
 
-describe("Getting shortest path", function() {
-  it("");
+describe("Board's Shortest Path", function() {
+  it("should fail getting a path with missing parameters", function(done) {
+    request(app)
+      .post("/board/get_shortest_path")
+      .send({})
+      .expect(
+        400,
+        {
+          message: "missing input parameters"
+        },
+        done
+      );
+  });
+
+  it("should fail getting a path for an invalid board", function(done) {
+    request(app)
+      .post("/board/get_shortest_path")
+      .send({ id: "hello", target: "h1" })
+      .expect(
+        400,
+        {
+          message: "board not found"
+        },
+        done
+      );
+  });
+
+  it("should fail getting a path for an invalid target", function(done) {
+    var id = "";
+    before(function() {
+      request(app)
+        .post("/board/set_board")
+        .send({ knight: "H1" })
+        .end(function(err, res) {
+          id = res.body.id;
+        });
+    });
+
+    request(app)
+      .post("/board/get_shortest_path")
+      .send({ id, target: "hello" })
+      .expect(
+        400,
+        {
+          message: "missing input parameters"
+        },
+        done
+      );
+  });
+
+  it("should get a path of length 5 for an adjacent target", function(done) {
+    request(app)
+      .post("/board/set_board")
+      .send({ knight: "H1" })
+      .end(function(err, res) {
+        request(app)
+          .post("/board/get_shortest_path")
+          .send({ id: res.body.id, target: "G2" })
+          .expect(200)
+          .expect(function(res) {
+            expect(res.body)
+              .to.have.property("path")
+              .to.be.an("array")
+              .and.have.lengthOf(5);
+          })
+          .end(done);
+      });
+  });
+
+  it("should get a path of length 7 for moving from one edge of the board to an opposite one", function(done) {
+    request(app)
+      .post("/board/set_board")
+      .send({ knight: "a1" })
+      .end(function(err, res) {
+        request(app)
+          .post("/board/get_shortest_path")
+          .send({ id: res.body.id, target: "h8" })
+          .expect(200)
+          .expect(function(res) {
+            expect(res.body)
+              .to.have.property("path")
+              .to.be.an("array")
+              .and.have.lengthOf(7);
+          })
+          .end(done);
+      });
+  });
 });

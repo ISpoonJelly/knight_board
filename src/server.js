@@ -30,7 +30,7 @@ mongoose.connect(env_config.mongodb.uri, env_config.mongodb.options).then(
 
 if (!module.parent) {
   server = http.createServer(app);
-  server.listen(env_config.express.port, env_config.express.hostname);
+  server.listen(env_config.express.port);
 
   server.on("listening", () => {
     var addr = server.address();
