@@ -1,9 +1,11 @@
 var request = require("supertest"),
+  co = require("co"),
   expect = require("chai").expect,
-  app = require("../../src/server");
+  app = require("../../src/server"),
+  Board = require("mongoose").model("Board");
 
 describe("Board Configuartion Saving", function() {
-  it("Fails to Save a new board configuration with empty parameters", function(done) {
+  it("should fail to create a new board configuration with empty parameters", function(done) {
     request(app)
       .post("/board/set_board")
       .send({})
@@ -16,7 +18,7 @@ describe("Board Configuartion Saving", function() {
       );
   });
 
-  it("Fails to Save a new board configuration with invalid knight position", function(done) {
+  it("should fail to create a new board configuration with invalid knight position", function(done) {
     request(app)
       .post("/board/set_board")
       .send({ knight: "hello" })
@@ -29,7 +31,7 @@ describe("Board Configuartion Saving", function() {
       );
   });
 
-  it("Saves a new board configuration and returns its id and knight position", function(done) {
+  it("should create a new board configuration and return its id and knight position", function(done) {
     request(app)
       .post("/board/set_board")
       .send({ knight: "H1" })
@@ -45,8 +47,24 @@ describe("Board Configuartion Saving", function() {
       })
       .end(done);
   });
+
+  it("should create a new board configuration and saves its data in the database", function(done) {
+    request(app)
+      .post("/board/set_board")
+      .send({ knight: "h1" })
+      .expect(200)
+      .end(function(err, res) {
+        expect(res.body)
+          .to.have.property("id")
+          .that.is.a("string").that.is.not.empty;
+        co(function*() {
+          var found = yield Board.findOne({ _id: res.body.id });
+          expect(found._id.toString()).to.equal(res.body.id);
+        }).then(done, done);
+      });
+  });
 });
 
 describe("Getting shortest path", function() {
-    it('')
+  it("");
 });
