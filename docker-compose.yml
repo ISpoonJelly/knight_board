@@ -11,7 +11,7 @@ services:
     command: npm start
     working_dir: /usr/board
     volumes:
-      - .:/usr/board
+      - ./src:/usr/board/src
     environment:
       - PORT=3000
       - MONGO_HOST=mongo
