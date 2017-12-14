@@ -5,6 +5,7 @@
 ## Tech Stack
   - Express
   - MongoDB
+  - Docker
   - Chai
   - Mocha
   - SuperTest
