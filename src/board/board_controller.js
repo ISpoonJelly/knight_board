@@ -9,7 +9,7 @@ function saveBoard(req, res) {
 
   knight = parseInput(knight.toLowerCase());
 
-  if (!validInput(knight)) {
+  if (!isValidInput(knight)) {
     return res.status(400).send({ message: "invalid knight position" });
   }
 
@@ -37,14 +37,16 @@ function getShortestPath(req, res) {
 
   target = parseInput(target.toLowerCase());
 
-  if (!validInput(target)) {
+  if (!isValidInput(target)) {
     return res.status(400).send({ message: "invalid target position" });
   }
 
   Board.findOne({ _id: id }, (err, board) => {
-    if(err) {
+    if (err) {
+      //TODO: handle different db errors
       return res.status(400).send({ message: "board not found" });
     }
+
     var path = board.find_shortest_to(target);
     var pathStr = Board.position_list_to_string_list(path);
 
@@ -52,13 +54,13 @@ function getShortestPath(req, res) {
   });
 }
 
-function validInput(input) {
+function isValidInput(input) {
   if (!input || input.length != 2) return false;
 
   var column = input.charAt(0);
   var row = input.charAt(1);
 
-  if (!isInteger(column) || !isInteger(row)) return false;
+  if (!isIntegerStr(column) || !isIntegerStr(row)) return false;
 
   column = parseInt(column);
   row = parseInt(row);
@@ -69,8 +71,14 @@ function validInput(input) {
   return true;
 }
 
-function isInteger(string) {
-  return !isNaN(parseInt(string)) && isFinite(string);
+function isIntegerStr(string) {
+  for (var char of string.split("")) {
+    if (isNaN(parseInt(char))) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function parseInput(input) {
@@ -79,5 +87,8 @@ function parseInput(input) {
 
 module.exports = {
   save_board: saveBoard,
-  get_shortest_path: getShortestPath
+  get_shortest_path: getShortestPath,
+  is_integer: isIntegerStr,
+  is_valid_input: isValidInput,
+  parse_input: parseInput
 };

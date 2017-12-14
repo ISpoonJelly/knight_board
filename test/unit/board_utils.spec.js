@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 
-var board_utils = require("../../src/board/board_utils");
+var boardUtils = require("../../src/board/board_utils");
 
 describe("Board Utils", function() {
   describe("Checking Valid Positions", function() {
@@ -8,56 +8,56 @@ describe("Board Utils", function() {
       var board_position;
 
       board_position = { row: 0, column: 1 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
 
       board_position = { row: 1, column: 0 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
 
       board_position = { row: 0, column: 0 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
 
       board_position = { row: -10, column: 7 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
     });
 
     it("should return false for any value above 8", function() {
       var board_position;
 
       board_position = { row: 9, column: 9 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
 
       board_position = { row: 1000, column: 10 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
 
       board_position = { row: 5, column: 50 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
     });
 
     it("should return false if row is missing", function() {
       var board_position;
 
       board_position = { column: 9 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
     });
 
     it("should return false if column is missing", function() {
       var board_position;
 
       board_position = { row: 9 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(false);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(false);
     });
 
     it("should return true if column and row are present, <=8 and >=1", function() {
       var board_position;
 
       board_position = { row: 4, column: 6 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(true);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(true);
 
       board_position = { row: 6, column: 2 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(true);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(true);
 
       board_position = { row: 1, column: 1 };
-      expect(board_utils.is_valid_position(board_position)).to.equal(true);
+      expect(boardUtils.is_valid_position(board_position)).to.equal(true);
     });
   });
 
@@ -66,33 +66,33 @@ describe("Board Utils", function() {
       var board_position;
 
       board_position = { row: 0, column: 0 };
-      expect(board_utils.is_valid_move(board_position, 0, 0)).to.equal(false);
+      expect(boardUtils.is_valid_move(board_position, 0, 0)).to.equal(false);
     });
 
     it("should return true for moving to the same position", function() {
       var board_position;
 
       board_position = { row: 1, column: 1 };
-      expect(board_utils.is_valid_move(board_position, 0, 0)).to.equal(true);
+      expect(boardUtils.is_valid_move(board_position, 0, 0)).to.equal(true);
 
       board_position = { row: 8, column: 8 };
-      expect(board_utils.is_valid_move(board_position, 0, 0)).to.equal(true);
+      expect(boardUtils.is_valid_move(board_position, 0, 0)).to.equal(true);
     });
 
     it("should return false for a move that would would result outside the board", function() {
       var board_position;
 
       board_position = { row: 1, column: 1 };
-      expect(board_utils.is_valid_move(board_position, -1, 0)).to.equal(false);
+      expect(boardUtils.is_valid_move(board_position, -1, 0)).to.equal(false);
 
       board_position = { row: 1, column: 1 };
-      expect(board_utils.is_valid_move(board_position, 8, 0)).to.equal(false);
+      expect(boardUtils.is_valid_move(board_position, 8, 0)).to.equal(false);
 
       board_position = { row: 8, column: 1 };
-      expect(board_utils.is_valid_move(board_position, -9, 0)).to.equal(false);
+      expect(boardUtils.is_valid_move(board_position, -9, 0)).to.equal(false);
 
       board_position = { row: 8, column: 8 };
-      expect(board_utils.is_valid_move(board_position, 1, 1)).to.equal(false);
+      expect(boardUtils.is_valid_move(board_position, 1, 1)).to.equal(false);
     });
   });
 
@@ -101,27 +101,27 @@ describe("Board Utils", function() {
       var board_position;
 
       board_position = { row: 0, column: 0 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         0
       );
 
       board_position = { row: 9, column: 9 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         0
       );
 
       board_position = { row: 1 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         0
       );
 
       board_position = { column: 1 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         0
       );
 
       board_position = {};
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         0
       );
     });
@@ -129,22 +129,22 @@ describe("Board Utils", function() {
     it("should return 2 moves for a corner position", function() {
       var board_position;
       board_position = { row: 1, column: 1 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         2
       );
 
       board_position = { row: 1, column: 8 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         2
       );
 
       board_position = { row: 8, column: 1 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         2
       );
 
       board_position = { row: 8, column: 8 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         2
       );
     });
@@ -153,22 +153,22 @@ describe("Board Utils", function() {
       var board_position;
 
       board_position = { row: 3, column: 3 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         8
       );
 
       board_position = { row: 3, column: 6 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         8
       );
 
       board_position = { row: 6, column: 3 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         8
       );
 
       board_position = { row: 6, column: 6 };
-      expect(board_utils.get_possible_moves(board_position)).to.have.lengthOf(
+      expect(boardUtils.get_possible_moves(board_position)).to.have.lengthOf(
         8
       );
     });
@@ -178,7 +178,7 @@ describe("Board Utils", function() {
       var board_position;
       board_position = { row: 1, column: 1 };
 
-      expect(board_utils.find_shortest_path(board_position, board_position))
+      expect(boardUtils.find_shortest_path(board_position, board_position))
         .to.have.lengthOf(1)
         .and.deep.include(board_position);
     });
@@ -191,7 +191,7 @@ describe("Board Utils", function() {
       final_position = { row: 7, column: 2 };
 
       expect(
-        board_utils.find_shortest_path(board_position, final_position)
+        boardUtils.find_shortest_path(board_position, final_position)
       ).to.have.lengthOf(5);
     });
 
@@ -203,7 +203,7 @@ describe("Board Utils", function() {
       final_position = { row: 8, column: 8 };
 
       expect(
-        board_utils.find_shortest_path(board_position, final_position)
+        boardUtils.find_shortest_path(board_position, final_position)
       ).to.have.lengthOf(7);
     });
   });

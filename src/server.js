@@ -4,7 +4,7 @@ var express = require("express"),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose");
 
-var env_config = require("./config/server.conf");
+var envConfig = require("./config/server.conf");
 
 var board = require("./board/index");
 
@@ -16,11 +16,12 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//TODO: have a route module for board
 app.post("/board/set_board", board.controller.save_board);
 app.post("/board/get_shortest_path", board.controller.get_shortest_path);
 
 mongoose.Promise = global.Promise;
-mongoose.connect(env_config.mongodb.uri, env_config.mongodb.options).then(
+mongoose.connect(envConfig.mongodb.uri, envConfig.mongodb.options).then(
   () => {},
   err => {
     console.log("[MONGO] %s", err);
@@ -30,15 +31,11 @@ mongoose.connect(env_config.mongodb.uri, env_config.mongodb.options).then(
 
 if (!module.parent) {
   server = http.createServer(app);
-  server.listen(env_config.express.port);
+  server.listen(envConfig.express.port);
 
   server.on("listening", () => {
     var addr = server.address();
-    console.log(
-      "[HTTP]",
-      "Server is running, listening on",
-      addr.address + ":" + addr.port
-    );
+    console.log("[HTTP]", "Server is running, listening on port ", addr.port);
   });
 
   server.on("error", err => {

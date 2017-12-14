@@ -1,4 +1,4 @@
-let possible_knight_moves = [
+let POSSIBLE_KNIGHT_MOVES = [
   { row: 1, column: 2 },
   { row: -1, column: 2 },
   { row: 1, column: -2 },
@@ -11,32 +11,32 @@ let possible_knight_moves = [
 
 function findShortestPath(start, finish) {
   var solutions = [];
-  var visited = [];
+  var visitedPositions = [];
 
-  var start_solution = [];
-  start_solution.push(start);
+  var startSolution = [];
+  startSolution.push(start);
 
-  solutions.push(start_solution);
-  visited.push(start);
+  solutions.push(startSolution);
+  visitedPositions.push(start);
 
   while (solutions.length != 0) {
-    var current_solution = solutions.shift();
-    var current_position = current_solution[current_solution.length - 1];
+    var currentSolution = solutions.shift();
+    var currentPosition = currentSolution[currentSolution.length - 1];
 
     if (
-      current_position.row == finish.row &&
-      current_position.column == finish.column
+      currentPosition.row == finish.row &&
+      currentPosition.column == finish.column
     ) {
-      return current_solution;
+      return currentSolution;
     }
 
-    for (var adjacent of getPossibleMoves(current_position)) {
-      if (!isVisited(visited, adjacent)) {
+    for (var adjacent of getPossibleMoves(currentPosition)) {
+      if (!isVisited(visitedPositions, adjacent)) {
         branch = [];
-        branch = branch.concat(current_solution);
+        branch = branch.concat(currentSolution);
         branch.push(adjacent);
 
-        visited.push(adjacent);
+        visitedPositions.push(adjacent);
 
         solutions.push(branch);
       }
@@ -57,7 +57,7 @@ function isVisited(list, position) {
 
 function getPossibleMoves(position) {
   var adjacent = [];
-  for (var move of possible_knight_moves) {
+  for (var move of POSSIBLE_KNIGHT_MOVES) {
     if (isValidMove(position, move.row, move.column)) {
       adjacent.push({
         row: position.row + move.row,
@@ -70,10 +70,10 @@ function getPossibleMoves(position) {
 }
 
 function isValidMove(position, row, column) {
-  var row_move = position.row + row >= 1 && position.row + row <= 8;
-  var col_move = position.column + column >= 1 && position.column + column <= 8;
+  var rowMove = position.row + row >= 1 && position.row + row <= 8;
+  var colMove = position.column + column >= 1 && position.column + column <= 8;
 
-  return isValidPosition(position) && row_move && col_move;
+  return isValidPosition(position) && rowMove && colMove;
 }
 
 function isValidPosition(position) {
